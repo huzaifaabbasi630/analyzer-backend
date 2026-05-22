@@ -28,8 +28,14 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Enable CORS
-app.use(cors());
+// Enable CORS with explicit settings
+app.use(cors({
+  origin: ['https://resume-analyzer-frontend-one-omega.vercel.app', 'http://localhost:3000', 'http://localhost:5173'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.options('*', cors());
 
 // Set static folder for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
