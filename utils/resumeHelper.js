@@ -8,17 +8,21 @@ const fs = require('fs');
  * @returns {Promise<string>} - Extracted text
  */
 const extractText = async (file) => {
-  const filePath = file.path;
   const fileExtension = file.originalname.split('.').pop().toLowerCase();
 
   try {
     if (fileExtension === 'pdf') {
-      const dataBuffer = fs.readFileSync(filePath);
+      const dataBuffer = file.buffer || fs.readFileSync(file.path);
       const data = await pdfParse(dataBuffer);
       return data.text;
     } else if (fileExtension === 'docx') {
-      const result = await mammoth.extractRawText({ path: filePath });
-      return result.value;
+      if (file.buffer) {
+        const result = await mammoth.extractRawText({ buffer: file.buffer });
+        return result.value;
+      } else {
+        const result = await mammoth.extractRawText({ path: file.path });
+        return result.value;
+      }
     } else {
       throw new Error('Unsupported file format. Please upload PDF or DOCX.');
     }

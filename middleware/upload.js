@@ -2,19 +2,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Set storage engine
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = 'uploads/';
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
-  },
-});
+// Set storage engine to memory so it works on serverless/Vercel (no file system writes)
+const storage = multer.memoryStorage();
 
 // Check file type
 function checkFileType(file, cb) {

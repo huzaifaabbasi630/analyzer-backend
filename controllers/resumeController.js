@@ -24,7 +24,7 @@ exports.uploadResume = async (req, res, next) => {
     // Save to Database
     const resume = await Resume.create({
       userId: req.user.id,
-      resumeFile: req.file.path,
+      resumeFile: req.file.originalname || 'uploaded-file',
       extractedText,
       atsScore,
     });
