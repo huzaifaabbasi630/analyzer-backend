@@ -30,7 +30,12 @@ if (process.env.NODE_ENV === 'development') {
 
 // Enable CORS with explicit settings
 app.use(cors({
-  origin: ['https://resume-analyzer-frontend-one-omega.vercel.app', 'http://localhost:3000', 'http://localhost:5173'],
+  origin: [
+    process.env.FRONTEND_URL,
+    'https://resume-analyzer-frontend-one-omega.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5173'
+  ].filter(Boolean),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
